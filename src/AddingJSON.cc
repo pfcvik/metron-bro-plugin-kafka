@@ -15,24 +15,27 @@
  * limitations under the License.
  */
 
-#include "TaggedJSON.h"
+#include "AddingJSON.h"
 
 namespace threading { namespace formatter {
 
-TaggedJSON::TaggedJSON(string sn, MsgThread* t, JSON::TimeFormat tf): JSON(t, tf), stream_name(sn)
+AddingJSON::AddingJSON(string sn, MsgThread* t, JSON::TimeFormat tf): JSON(t, tf), sensor_name(sn)
 {}
 
-TaggedJSON::~TaggedJSON()
+AddingJSON::~AddingJSON()
 {}
 
-bool TaggedJSON::Describe(ODesc* desc, int num_fields, const Field* const* fields, Value** vals) const
+bool AddingJSON::Describe(ODesc* desc, int num_fields, const Field* const* fields, Value** vals) const
 {
     desc->AddRaw("{");
 
+    // 'tag' the json; aka prepend the sensor name
+    desc->AddRaw("\"sensor_name\": \"");
+    desc->AddRaw(sensor_name);
+    desc->AddRaw("\", ");
+
     // 'tag' the json; aka prepend the stream name to the json-formatted log content
-    desc->AddRaw("\"");
-    desc->AddRaw(stream_name);
-    desc->AddRaw("\": ");
+    desc->AddRaw("\"data\": ");
 
     // append the JSON formatted log record itself
     JSON::Describe(desc, num_fields, fields, vals);

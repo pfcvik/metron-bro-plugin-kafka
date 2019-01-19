@@ -42,11 +42,13 @@ export {
         ## Destination kafka topic name
         const topic_name: string = "bro" &redef;
 
+        # this is the name to add to each message to identify
+        # this sensor in the logs. It will be added to a "sensor"
+        # field in the submitted json.
+        const sensor_name = "brosensor" &redef;
+
         ## Maximum wait on shutdown in milliseconds
         const max_wait_on_shutdown: count = 3000 &redef;
-
-        ## Whether or not to tag JSON with a log stream identifier
-        const tag_json: bool = F &redef;
 
         ## Any additional configs to pass to librdkafka
         const kafka_conf: table[string] of string = table(
@@ -56,4 +58,3 @@ export {
         ## A comma separated list of librdkafka debug contexts
         const debug: string = "" &redef;
 }
-
