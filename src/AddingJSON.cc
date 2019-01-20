@@ -19,7 +19,7 @@
 
 namespace threading { namespace formatter {
 
-AddingJSON::AddingJSON(string sn, MsgThread* t, JSON::TimeFormat tf): JSON(t, tf), sensor_name(sn), event_type(sn)
+AddingJSON::AddingJSON(string sn, string et, MsgThread* t, JSON::TimeFormat tf): JSON(t, tf), sensor_name(sn), event_type(et)
 {}
 
 AddingJSON::~AddingJSON()
