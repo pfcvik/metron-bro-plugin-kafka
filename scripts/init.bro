@@ -47,11 +47,6 @@ export {
         # field in the submitted json.
         const sensor_name = "brosensor" &redef;
 
-        # this is the type of the stream to add to each message to identify
-        # the stream in the logs. It will be added to a "sensor"
-        # field in the submitted json.
-        const event_type = "" &redef;        
-
         ## Maximum wait on shutdown in milliseconds
         const max_wait_on_shutdown: count = 3000 &redef;
 

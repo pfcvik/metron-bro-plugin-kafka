@@ -71,7 +71,6 @@ private:
     map<string, string> kafka_conf;
     string topic_name;
     string sensor_name;
-    string event_type;
     threading::formatter::Formatter *formatter;
     RdKafka::Producer* producer;
     RdKafka::Topic* topic;
