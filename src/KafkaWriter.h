@@ -26,7 +26,7 @@
 #include <threading/Formatter.h>
 
 #include "kafka.bif.h"
-#include "TaggedJSON.h"
+#include "AddingJSON.h"
 
 namespace RdKafka {
     class Conf;
@@ -67,10 +67,11 @@ protected:
 private:
     static const string default_topic_key;
     string stream_id;
-    bool tag_json;
     string json_timestamps;
     map<string, string> kafka_conf;
     string topic_name;
+    string sensor_name;
+    string event_type;
     threading::formatter::Formatter *formatter;
     RdKafka::Producer* producer;
     RdKafka::Topic* topic;

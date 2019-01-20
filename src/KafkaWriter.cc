@@ -30,9 +30,6 @@ KafkaWriter::KafkaWriter(WriterFrontend* frontend):
   // bro scripting land.  accessing these is not thread-safe and 'DoInit'
   // is potentially accessed from multiple threads.
 
-  // tag_json - thread local copy
-  tag_json = BifConst::Kafka::tag_json;
-
   // json_timestamps
   ODesc tsfmt;
   BifConst::Kafka::json_timestamps->Describe(&tsfmt);
@@ -45,6 +42,16 @@ KafkaWriter::KafkaWriter(WriterFrontend* frontend):
   topic_name.assign(
     (const char*)BifConst::Kafka::topic_name->Bytes(),
     BifConst::Kafka::topic_name->Len());
+
+  // sensor name - thread local copy
+  sensor_name.assign(
+    (const char*)BifConst::Kafka::sensor_name->Bytes(),
+    BifConst::Kafka::sensor_name->Len());
+
+  // event type - thread local copy
+  event_type.assign(
+    (const char*)BifConst::Kafka::event_type->Bytes(),
+    BifConst::Kafka::event_type->Len());
 
   // kafka_conf - thread local copy
   Val* val = BifConst::Kafka::kafka_conf->AsTableVal();
@@ -100,7 +107,7 @@ bool KafkaWriter::DoInit(const WriterInfo& info, int num_fields, const threading
     }
     else if ( strcmp(json_timestamps.c_str(), "JSON::TS_ISO8601") == 0 ) {
       tf = threading::formatter::JSON::TS_ISO8601;
-    } 
+    }
     else {
       Error(Fmt("KafkaWriter::DoInit: Invalid JSON timestamp format %s",
         json_timestamps.c_str()));
@@ -108,12 +115,7 @@ bool KafkaWriter::DoInit(const WriterInfo& info, int num_fields, const threading
     }
 
     // initialize the formatter
-    if(BifConst::Kafka::tag_json) {
-      formatter = new threading::formatter::TaggedJSON(info.path, this, tf);
-    } 
-    else {
-      formatter = new threading::formatter::JSON(this, tf);
-    }
+    formatter = new threading::formatter::AddingJSON(sensor_name, event_type, this, tf);
 
     // is debug enabled
     string debug;

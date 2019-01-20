@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef BRO_PLUGIN_BRO_KAFKA_TAGGEDJSON_H
-#define BRO_PLUGIN_BRO_KAFKA_TAGGEDJSON_H
+#ifndef BRO_PLUGIN_BRO_KAFKA_ADDINGJSON_H
+#define BRO_PLUGIN_BRO_KAFKA_ADDINGJSON_H
 
 #include <string>
 #include <threading/Formatter.h>
@@ -35,15 +35,16 @@ namespace threading { namespace formatter {
  *   { 'conn' : { ... }}
  *   { 'http' : { ... }}
  */
-class TaggedJSON : public JSON {
+class AddingJSON : public JSON {
 
 public:
-    TaggedJSON(string stream_name, MsgThread* t, JSON::TimeFormat tf);
-    virtual ~TaggedJSON();
+    AddingJSON(string sensor_name, string event_type, MsgThread* t, JSON::TimeFormat tf);
+    virtual ~AddingJSON();
     virtual bool Describe(ODesc* desc, int num_fields, const Field* const* fields, Value** vals) const;
 
 private:
-    string stream_name;
+    string sensor_name;
+    string event_type;
 };
 
 }}
